@@ -4,6 +4,7 @@
 #include "deltaTime.h"
 #include <conio.h>
 #include <iostream>
+#include <cmath>
 
 #define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
 
@@ -12,14 +13,19 @@ TGame::TGame(short ScreenX, short ScreenY) {
 	Figure = new TFigure(Screen);
 }
 
-short Score = 0;
+
+int Score = 0;
+float getSpeed() {
+	return pow(log10((float)Score / 1000. + 1.), 2.) + 1.;
+}
+
 void TGame::start() {
 	Screen->draw();
 	while (!isGameOver) {
 		checkControls();
 		deltaTime.updateTime();
 
-		if (deltaTime >= 1) {
+		if (deltaTime >= 1. / getSpeed()) {
 			deltaTime.resetTime();
 			if (!Figure->tryMove(1)) {
 				checkLines();
@@ -29,6 +35,8 @@ void TGame::start() {
 		}
 		gotoxy(2 * Screen->getX() + 6, 2);
 		std::cout << rgb(250, 250, 250) + "Score: " << Score;
+		gotoxy(2 * Screen->getX() + 6, 4);
+		std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 	}
 }
 
@@ -61,6 +69,8 @@ void TGame::checkControls() {
 			Score++;
 			gotoxy(2 * Screen->getX() + 6, 2);
 			std::cout << rgb(250, 250, 250) + "Score: " << Score;
+			gotoxy(2 * Screen->getX() + 6, 4);
+			std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 		}
 		deltaTime.resetTime();
 		break;
@@ -71,6 +81,7 @@ void TGame::checkControls() {
 		break;
 	case ('r'):
 		//if (!Figure->tryRespawn()) GameOver = true;
+		Score++;
 		break;
 	default:
 		break;
