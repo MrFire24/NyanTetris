@@ -16,7 +16,7 @@ TGame::TGame(short ScreenX, short ScreenY) {
 
 int Score = 0;
 float getSpeed() {
-	return pow(log10((float)Score / 1000. + 1.), 2.) + 1.;
+	return pow(log10((float)Score / 750. + 1.), 2.) + 1.;
 }
 
 void TGame::start() {
@@ -38,6 +38,7 @@ void TGame::start() {
 		gotoxy(2 * Screen->getX() + 6, 4);
 		std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 	}
+	while (true);
 }
 
 void TGame::checkControls() {
