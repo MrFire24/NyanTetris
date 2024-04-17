@@ -147,6 +147,7 @@
     <ClCompile Include="TScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="deltaTime.h" />
     <ClInclude Include="TBlock.h" />
     <ClInclude Include="TFigure.h" />

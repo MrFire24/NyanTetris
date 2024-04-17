@@ -19,6 +19,9 @@
     <Filter Include="Исходные файлы\Resource Files">
       <UniqueIdentifier>{da85e8f8-711a-4763-9e89-095b612f45b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Config">
+      <UniqueIdentifier>{ffc37a3f-94f2-448a-b54c-8185d642475a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TGame.h">
@@ -35,6 +38,9 @@
     </ClInclude>
     <ClInclude Include="TFigure.h">
       <Filter>Исходные файлы\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Исходные файлы\Config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,9 @@
 #define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
 
 TGame::TGame(short ScreenX, short ScreenY) {
+	std::cout << "\x1b[s";
+	std::cout << "\x1b[?25l";
+	std::cout << "\x1b]0;Tetris v" << GAME_VERSION << "\x1b\(0x1B 0x5C)";
 	Screen = new TScreen(ScreenX, ScreenY);
 	Figure = new TFigure(Screen);
 }
@@ -33,9 +36,9 @@ void TGame::start() {
 			}
 				
 		}
-		gotoxy(2 * Screen->getX() + 6, 2);
+		gotoxy(2 * Screen->getX() + 7, 2);
 		std::cout << rgb(250, 250, 250) + "Score: " << Score;
-		gotoxy(2 * Screen->getX() + 6, 4);
+		gotoxy(2 * Screen->getX() + 7, 4);
 		std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 	}
 	while (true);
@@ -68,9 +71,9 @@ void TGame::checkControls() {
 	case (' '):
 		while (Figure->tryMove(1)) {
 			Score++;
-			gotoxy(2 * Screen->getX() + 6, 2);
+			gotoxy(2 * Screen->getX() + 7, 2);
 			std::cout << rgb(250, 250, 250) + "Score: " << Score;
-			gotoxy(2 * Screen->getX() + 6, 4);
+			gotoxy(2 * Screen->getX() + 7, 4);
 			std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 		}
 		deltaTime.resetTime();

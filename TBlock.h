@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Config.h"
 
 std::string rgb(int r, int g, int b);
 
