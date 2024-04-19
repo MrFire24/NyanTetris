@@ -1,10 +1,10 @@
 #pragma once
 
-#define GAME_VERSION "0.3.1"
+#define GAME_VERSION "0.3.2"
 
 #define FIELD_WIDTH	11
 #define FIELD_HEIGHT 20
 
-#define SCREEN_WIDTH 36
-#define SCREEN_HEIGHT 21
+#define SCREEN_WIDTH 44
+#define SCREEN_HEIGHT 23
 

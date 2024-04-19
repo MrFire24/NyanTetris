@@ -5,13 +5,31 @@
 #include <conio.h>
 #include <iostream>
 #include <cmath>
+#include <windows.h>
 
 #define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
 
-//
-TGame::TGame(short ScreenX, short ScreenY) {
-	system("cls"); //обязательно для того что - бы в собраном проекте работали escape - последовательности(хз почему так)
+void setUpConsole() {
+	std::cout << "\x1b[8;" << SCREEN_HEIGHT << ";" << SCREEN_WIDTH << "t";
 	std::cout << "\x1b]0;Tetris v" << GAME_VERSION << "\x07";
+
+	RECT desktop;
+	GetWindowRect(GetDesktopWindow(), &desktop);
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_FONT_INFOEX fontInfo = { sizeof(CONSOLE_FONT_INFOEX) };
+	GetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
+
+	fontInfo.dwFontSize.Y = desktop.bottom / SCREEN_HEIGHT / 2;
+	fontInfo.dwFontSize.X = fontInfo.dwFontSize.Y / 2;
+
+	SetCurrentConsoleFontEx(hConsole, FALSE, &fontInfo);
+	SetConsoleScreenBufferSize(hConsole, { SCREEN_WIDTH, SCREEN_HEIGHT });
+}
+
+TGame::TGame(short ScreenX, short ScreenY) {
+	system("cls"); //обязательно для того что - бы в собраном проекте работали escape-последовательности(хз почему так)
+	setUpConsole();
 
 	char answer;
 	while (true) {
