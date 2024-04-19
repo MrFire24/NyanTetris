@@ -8,7 +8,7 @@ private:
 	TFigure* Figure;
 
 	bool isGameOver = false;
-	
+	bool fastMode;
 public:
 	TGame(short ScreenX, short ScreenY);
 

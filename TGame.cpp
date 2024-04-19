@@ -8,10 +8,45 @@
 
 #define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
 
+//
 TGame::TGame(short ScreenX, short ScreenY) {
+	system("cls"); //обязательно для того что - бы в собраном проекте работали escape - последовательности(хз почему так)
+	std::cout << "\x1b]0;Tetris v" << GAME_VERSION << "\x07";
+
+	char answer;
+	while (true) {
+		system("cls");
+
+		std::cout << R"( 
+  Controls:
+   A - left 		  ^~^  ,
+   D - right		 ('Y') )
+   W - rotate		 /   \/ 
+   S - down 		(\|||/)
+   Space - quick down (full down)
+
+   Mouse Click - pause	 /\_/\
+   Enter - continue	( o.o )
+   C - change color	 > ^ <
+	
+  (Affects only the quick down function)
+  FastMod or SaveMod (F/S): )";
+
+		std::cin >> answer;
+		if (answer == 'F') {
+			fastMode = true;
+			break;
+		}
+		if (answer == 'S') {
+			fastMode = false;
+			break;
+		}
+	}
+
+	system("cls");
 	std::cout << "\x1b[s";
 	std::cout << "\x1b[?25l";
-	std::cout << "\x1b]0;Tetris v" << GAME_VERSION << "\x1b\(0x1B 0x5C)";
+
 	Screen = new TScreen(ScreenX, ScreenY);
 	Figure = new TFigure(Screen);
 }
@@ -25,7 +60,7 @@ float getSpeed() {
 void TGame::start() {
 	Screen->draw();
 	while (!isGameOver) {
-		checkControls();
+		if (_kbhit()) checkControls();
 		deltaTime.updateTime();
 
 		if (deltaTime >= 1. / getSpeed()) {
@@ -46,10 +81,8 @@ void TGame::start() {
 
 void TGame::checkControls() {
 	static char key;
-	if (_kbhit()) key = _getch();
-	else return;
+	key = tolower(_getch());
 
-	key = tolower(key);
 	switch (key) {
 	case ('a'):
 		Figure->tryMove(0);
@@ -76,7 +109,14 @@ void TGame::checkControls() {
 			gotoxy(2 * Screen->getX() + 7, 4);
 			std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 		}
-		deltaTime.resetTime();
+		if (fastMode) {
+			checkLines();
+			if (!Figure->tryRespawn()) isGameOver = true;
+		}
+		else  {
+			deltaTime.resetTime();
+			if (_kbhit()) checkControls();
+		}
 		break;
 	//	/	/	/	/
 	case ('c'):
@@ -85,7 +125,7 @@ void TGame::checkControls() {
 		break;
 	case ('r'):
 		//if (!Figure->tryRespawn()) GameOver = true;
-		Score++;
+		//Score++;
 		break;
 	default:
 		break;
