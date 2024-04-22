@@ -2,8 +2,6 @@
 #include "TScreen.h"
 #include "TBlock.h"
 
-short rand(short from, short to);
-
 class TFigure {
 private:
     TScreen* Screen;
@@ -13,6 +11,7 @@ private:
     //rotarion: 0 = 0deg; 1 = 90deg; 2 = 180deg; 3 = 270deg;
 
     bool tryPutOn(short newX, short newY, short newRot);
+    short* getProcessedBlockPos(short x, short y, short rot);
 public:
     TBlock* Block;
     TFigure(TScreen* Screen);

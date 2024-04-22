@@ -4,6 +4,6 @@
 int main()
 {
     srand(time(NULL));
-    TGame Game(FIELD_WIDTH, FIELD_HEIGHT);
+    TGame Game;
     Game.start();
 }

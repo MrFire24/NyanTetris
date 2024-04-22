@@ -10,7 +10,7 @@ private:
 	bool isGameOver = false;
 	bool fastMode;
 public:
-	TGame(short ScreenX, short ScreenY);
+	TGame();
 
 	void start();
 	void checkControls();

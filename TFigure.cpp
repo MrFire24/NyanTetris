@@ -41,16 +41,12 @@ const bool Figures[7][3][4]{
   }
 };
 
-short FigureRotationCount[7] = { 1, 4, 4, 2, 2, 2, 4 };
+const int8_t FigureRotationCount[7] = { 1, 4, 4, 2, 2, 2, 4 };
 
-short rand(short from, short to)
-{
-    return (rand() % (to - from + 1) + from);
-}
 
 TFigure::TFigure(TScreen* Screen) : Screen(Screen) { tryRespawn(); };
 
-short* getProcessedBlockPos(short x, short y, short rot) {
+short* TFigure::getProcessedBlockPos(short x, short y, short rot) {
     static short ProcessedBlockPos[2];
     switch (rot) {
     case 0:
@@ -84,7 +80,7 @@ bool TFigure::tryPutOn(short newX, short newY, short newRot) {
             blockX = newX + blockPos[0];
             blockY = newY + blockPos[1];
             if (Figures[type][ix][iy]) {
-                if (blockX < 0 || blockX >= Screen->getX() || blockY >= Screen->getY()) return false;
+                if (blockX < 0 || blockX >= FIELD_WIDTH || blockY >= FIELD_HEIGHT) return false;
                 if (Screen->getBlock(blockX, blockY) != nullptr && Screen->getBlock(blockX, blockY) != Block) return false;
             }
         }
@@ -114,46 +110,11 @@ bool TFigure::tryPutOn(short newX, short newY, short newRot) {
     return true;
 }
 
-/*
-bool TFigure::checkCollision() {
-    static short* BlockScreenPos;
-    for (short iy = 0; iy < 4; iy++) {
-        for (short ix = 0; ix < 3; ix++) {
-            if (Figures[type][ix][iy]) {
-                BlockScreenPos = getBlockScreenPos(ix, iy);
-                if (BlockScreenPos[0] < 0 || BlockScreenPos[0] >= Screen->getX() || BlockScreenPos[1] >= Screen->getY()) return true;
-                if (Screen->getBlock(BlockScreenPos[0], BlockScreenPos[1]) != nullptr) return true;
-            }
-        }
-    }
-    return false;
-}
-
-void TFigure::clearFromScreen() {
-    static short* BlockScreenPos;
-    for (short iy = 0; iy < 4; iy++) {
-        for (short ix = 0; ix < 3; ix++) {
-            BlockScreenPos = getBlockScreenPos(ix, iy);
-            if (Figures[type][ix][iy] && Screen->getBlock(BlockScreenPos[0], BlockScreenPos[1]) != nullptr) Screen->delBlock(BlockScreenPos[0], BlockScreenPos[1]);
-        }
-    }
-}
-
-void TFigure::putOnScreen() {
-    static short* BlockScreenPos;
-    for (short iy = 0; iy < 4; iy++) {
-        for (short ix = 0; ix < 3; ix++) {
-            BlockScreenPos = getBlockScreenPos(ix, iy);
-            if (Figures[type][ix][iy]) Screen->putBlock(BlockScreenPos[0], BlockScreenPos[1], Block);
-        }
-    }
-}
-*/
 
 bool TFigure::tryRespawn() {
-    Block = new TBlock(rand(1, 8) * 32, rand(1, 8) * 32, rand(1, 8) * 32);
+    Block = new TBlock();
     type = rand(1, 7) - 1;
-    x = Screen->getX() / 2;
+    x = FIELD_WIDTH / 2;
     y = 1;
     rotarion = 0;
     deltaTime.resetTime();

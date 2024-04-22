@@ -7,8 +7,12 @@ std::string rgb(int r, int g, int b) {
     return "\x1b[38;2;" + std::to_string(r) + ";" + std::to_string(g) + ";" + std::to_string(b) + "m";
 }
 
-TBlock::TBlock() {}
-TBlock::TBlock(short r, short g, short b) : color(rgb(r, g, b)) {}
+short rand(short from, short to) {
+    return (rand() % (to - from + 1) + from);
+}
+
+TBlock::TBlock() { setRandomColor(); }
+TBlock::TBlock(short r, short g, short b) { setColor(r, g, b); }
 
 std::string TBlock::getColor() {
     return color;
@@ -18,6 +22,10 @@ void TBlock::setColor(short r, short g, short b) {
     color = rgb(r, g, b);
 }
 
-void TBlock::del() {
+void TBlock::setRandomColor() {
+    setColor(rand(1, 8) * 32, rand(1, 8) * 32, rand(1, 8) * 32);
+}
+
+TBlock::~TBlock() {
     delete this;
 }

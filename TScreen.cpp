@@ -3,20 +3,20 @@
 
 #define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
 
-TScreen::TScreen(short fieldX, short fieldY) : fieldX(fieldX), fieldY(fieldY) {
-    Field = new TBlock**[fieldY];
-    for (short i = 0; i < fieldY; i++) {
-        Field[i] = new TBlock*[fieldX];
-        for (short j = 0; j < fieldX; j++)
+TScreen::TScreen() {
+    Field = new TBlock**[FIELD_HEIGHT];
+    for (short i = 0; i < FIELD_HEIGHT; i++) {
+        Field[i] = new TBlock*[FIELD_WIDTH];
+        for (short j = 0; j < FIELD_WIDTH; j++)
             Field[i][j] = nullptr;
     }
 }
 
 void TScreen::draw() {
     std::cout << "\x1b[u";
-    for (short iy = -1; iy <= fieldY; iy++) {
-        for (short ix = -1; ix <= fieldX; ix++) {
-            if (iy == -1 || iy == fieldY || ix == -1 || ix == fieldX) {
+    for (short iy = -1; iy <= FIELD_HEIGHT; iy++) {
+        for (short ix = -1; ix <= FIELD_WIDTH; ix++) {
+            if (iy == -1 || iy == FIELD_HEIGHT || ix == -1 || ix == FIELD_WIDTH) {
                 std::cout << rgb(128, 128, 128) + "##";
             }
             else if (getBlock(ix, iy) != nullptr) std::cout << getBlock(ix, iy)->getColor() + "[]";
@@ -25,9 +25,6 @@ void TScreen::draw() {
         std::cout << std::endl;
     }
 }
-
-short TScreen::getX() { return fieldX; }
-short TScreen::getY() { return fieldY; }
 
 TBlock* TScreen::getBlock(short x, short y) { return Field[y][x]; }
 
@@ -43,6 +40,6 @@ void TScreen::delLine(short line) {
     for (short iy = line; iy >= 1; iy--) {
         Field[iy] = Field[iy - 1];
     }
-    Field[0] = new TBlock * [fieldX];
-    for (short i = 0; i < fieldX; i++) Field[0][i] = nullptr;
+    Field[0] = new TBlock * [FIELD_WIDTH];
+    for (short i = 0; i < FIELD_WIDTH; i++) Field[0][i] = nullptr;
 }

@@ -27,7 +27,7 @@ void setUpConsole() {
 	SetConsoleScreenBufferSize(hConsole, { SCREEN_WIDTH, SCREEN_HEIGHT });
 }
 
-TGame::TGame(short ScreenX, short ScreenY) {
+TGame::TGame() {
 	system("cls"); //обязательно для того что - бы в собраном проекте работали escape-последовательности(хз почему так)
 	setUpConsole();
 
@@ -65,7 +65,7 @@ TGame::TGame(short ScreenX, short ScreenY) {
 	std::cout << "\x1b[s";
 	std::cout << "\x1b[?25l";
 
-	Screen = new TScreen(ScreenX, ScreenY);
+	Screen = new TScreen();
 	Figure = new TFigure(Screen);
 }
 
@@ -89,9 +89,9 @@ void TGame::start() {
 			}
 				
 		}
-		gotoxy(2 * Screen->getX() + 7, 2);
+		gotoxy(2 * FIELD_WIDTH + 7, 2);
 		std::cout << rgb(250, 250, 250) + "Score: " << Score;
-		gotoxy(2 * Screen->getX() + 7, 4);
+		gotoxy(2 * FIELD_WIDTH + 7, 4);
 		std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 	}
 	while (true);
@@ -122,9 +122,9 @@ void TGame::checkControls() {
 	case (' '):
 		while (Figure->tryMove(1)) {
 			Score++;
-			gotoxy(2 * Screen->getX() + 7, 2);
+			gotoxy(2 * FIELD_WIDTH + 7, 2);
 			std::cout << rgb(250, 250, 250) + "Score: " << Score;
-			gotoxy(2 * Screen->getX() + 7, 4);
+			gotoxy(2 * FIELD_WIDTH + 7, 4);
 			std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
 		}
 		if (fastMode) {
@@ -138,7 +138,7 @@ void TGame::checkControls() {
 		break;
 	//	/	/	/	/
 	case ('c'):
-		Figure->Block->setColor(rand(1, 8) * 32, rand(1, 8) * 32, rand(1, 8) * 32);
+		Figure->Block->setRandomColor();
 		Screen->draw();
 		break;
 	case ('r'):
@@ -151,9 +151,9 @@ void TGame::checkControls() {
 }
 
 void TGame::checkLines() {
-	for (short iy = Screen->getY() - 1; iy >= 0; iy--) {
-		for (short ix = 0; ix <= Screen->getX(); ix++) {
-			if (ix == Screen->getX()) {
+	for (short iy = FIELD_HEIGHT - 1; iy >= 0; iy--) {
+		for (short ix = 0; ix <= FIELD_WIDTH; ix++) {
+			if (ix == FIELD_WIDTH) {
 				Screen->delLine(iy);
 				iy++;
 				Score += 100;
