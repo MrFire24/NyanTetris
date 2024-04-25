@@ -13,5 +13,5 @@ public:
     void putBlock(short x, short y, TBlock* block);
     void delBlock(short x, short y);
 
-    void delLine(short line);
+    void delLine(short line);   
 };

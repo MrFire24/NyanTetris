@@ -2,12 +2,11 @@
 #include "TScreen.h"
 #include "TFigure.h"
 #include "deltaTime.h"
+#include "DBOperator.h"
 #include <conio.h>
 #include <iostream>
 #include <cmath>
 #include <windows.h>
-
-#define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
 
 void setUpConsole() {
 	std::cout << "\x1b[8;" << SCREEN_HEIGHT << ";" << SCREEN_WIDTH << "t";
@@ -35,6 +34,15 @@ TGame::TGame() {
 	while (true) {
 		system("cls");
 
+		Table Higthscores = TetrisDB.tryGetHigthscores(7);
+		if (Higthscores.data != nullptr) {
+			cout << "\n   Higthscores Table (TOP 7):" << endl;
+			for (int i = 0; i < Higthscores.row_count; i++) {
+				cout << "   " << i + 1 << ". " << Higthscores.data[0][i] << '\t' << Higthscores.data[1][i] << endl;
+			}
+		}
+		else cout << "\n   Higthscores Table Loading Failed" << endl;
+
 		std::cout << R"( 
   Controls:
    A - left 		  ^~^  ,
@@ -48,14 +56,14 @@ TGame::TGame() {
    C - change color	 > ^ <
 	
   (Affects only the quick down function)
-  FastMod or SaveMod (F/S): )";
+  FastMode or SafeMode (F/S): )";
 
 		std::cin >> answer;
 		if (answer == 'F') {
 			fastMode = true;
 			break;
 		}
-		if (answer == 'S') {
+		if (answer == 'S' || answer == '\n') {
 			fastMode = false;
 			break;
 		}
@@ -69,10 +77,15 @@ TGame::TGame() {
 	Figure = new TFigure(Screen);
 }
 
-
 int Score = 0;
 float getSpeed() {
 	return pow(log10((float)Score / 750. + 1.), 2.) + 1.;
+}
+
+string removeSpecialCharacter(string s){
+	string ans = "";
+	for (auto ch : s) if (isalpha(ch))ans += ch;
+	return ans;
 }
 
 void TGame::start() {
@@ -93,6 +106,55 @@ void TGame::start() {
 		std::cout << rgb(250, 250, 250) + "Score: " << Score;
 		gotoxy(2 * FIELD_WIDTH + 7, 4);
 		std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
+	}
+	Table Higthscores;
+
+	while (true) {
+		system("cls");
+		Higthscores = TetrisDB.tryGetHigthscores(7);
+		if (Higthscores.data != nullptr) {
+			cout << "\n   Your Score is: " << Score << endl;
+			cout << "\n   Higthscores Table (TOP 7):" << endl;
+			for (int i = 0; i < Higthscores.row_count; i++) {
+				cout << "   " << i + 1 << ". " << Higthscores.data[0][i] << '\t' << Higthscores.data[1][i] << endl;
+			}
+			break;
+		}
+		else {
+			cout << "   Higthscores Table Loading Failed" << endl;
+			cout << "   If you want to retry connecting again, write \"R\": " ;
+			char input; cin >> input;
+			if (input != 'R') break;
+		}
+	}
+	if (Higthscores.data != nullptr) {
+		string input;
+		for (int i = 0; i < Higthscores.row_count; i++) if (Score > stoi(Higthscores.data[1][i])) {
+			cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
+			cout << "   Type your name (max length = 8): ";
+			cout << "\x1b[s";
+			while (true) {
+				cout << "\x1b[u" << "                         " << "\x1b[u";
+				cin >> input;
+				input = removeSpecialCharacter(input);
+				if (input == "" || input.length() > 8) continue;
+				else{
+					TetrisDB.tryAddHigthscore(input, Score);
+					Higthscores = TetrisDB.tryGetHigthscores(7);
+					system("cls");
+					if (Higthscores.data != nullptr) {
+						cout << "\n   Your Score is: " << Score << endl;
+						cout << "\n   Higthscores Table (TOP 7):" << endl;
+						for (int i = 0; i < Higthscores.row_count; i++) {
+							cout << "   " << i + 1 << ". " << Higthscores.data[0][i] << '\t' << Higthscores.data[1][i] << endl;
+						}
+					}
+					else cout << "   Higthscores Table Loading Failed" << endl;
+					break;
+				}
+			}
+			break;
+		}
 	}
 	while (true);
 }

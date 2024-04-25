@@ -13,7 +13,7 @@ TScreen::TScreen() {
 }
 
 void TScreen::draw() {
-    std::cout << "\x1b[u";
+    gotoxy(0, 0);
     for (short iy = -1; iy <= FIELD_HEIGHT; iy++) {
         for (short ix = -1; ix <= FIELD_WIDTH; ix++) {
             if (iy == -1 || iy == FIELD_HEIGHT || ix == -1 || ix == FIELD_WIDTH) {

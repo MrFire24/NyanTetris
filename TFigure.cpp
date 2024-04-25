@@ -3,47 +3,6 @@
 #include "deltaTime.h"
 #include <iostream>
 
-const bool Figures[7][3][4]{
-  {
-    {1, 1, 0, 0},
-    {1, 1, 0, 0}, //0
-    {0, 0, 0, 0}
-  },
-  {
-    {0, 0, 0, 0},
-    {1, 1, 1, 0}, //1
-    {0, 0, 1, 0}
-  },
-  {
-    {0, 0, 1, 0},
-    {1, 1, 1, 0}, //2
-    {0, 0, 0, 0}
-  },
-  {
-    {0, 0, 0, 0},
-    {1, 1, 0, 0}, //3
-    {0, 1, 1, 0}
-  },
-  {
-    {0, 1, 1, 0},
-    {1, 1, 0, 0}, //4
-    {0, 0, 0, 0}
-  },
-  {
-    {0, 0, 0, 0},
-    {1, 1, 1, 1}, //5
-    {0, 0, 0, 0}
-  },
-  {
-    {0, 1, 0, 0},
-    {1, 1, 0, 0}, //6
-    {0, 1, 0, 0}
-  }
-};
-
-const int8_t FigureRotationCount[7] = { 1, 4, 4, 2, 2, 2, 4 };
-
-
 TFigure::TFigure(TScreen* Screen) : Screen(Screen) { tryRespawn(); };
 
 short* TFigure::getProcessedBlockPos(short x, short y, short rot) {

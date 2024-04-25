@@ -2,6 +2,8 @@
 #include <string>
 #include "Config.h"
 
+#define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
+
 std::string rgb(int r, int g, int b);
 short rand(short from, short to);
 

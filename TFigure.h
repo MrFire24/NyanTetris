@@ -12,6 +12,46 @@ private:
 
     bool tryPutOn(short newX, short newY, short newRot);
     short* getProcessedBlockPos(short x, short y, short rot);
+
+    const bool Figures[7][3][4]{
+  {
+    {1, 1, 0, 0},
+    {1, 1, 0, 0}, //0
+    {0, 0, 0, 0}
+  },
+  {
+    {0, 0, 0, 0},
+    {1, 1, 1, 0}, //1
+    {0, 0, 1, 0}
+  },
+  {
+    {0, 0, 1, 0},
+    {1, 1, 1, 0}, //2
+    {0, 0, 0, 0}
+  },
+  {
+    {0, 0, 0, 0},
+    {1, 1, 0, 0}, //3
+    {0, 1, 1, 0}
+  },
+  {
+    {0, 1, 1, 0},
+    {1, 1, 0, 0}, //4
+    {0, 0, 0, 0}
+  },
+  {
+    {0, 0, 0, 0},
+    {1, 1, 1, 1}, //5
+    {0, 0, 0, 0}
+  },
+  {
+    {0, 1, 0, 0},
+    {1, 1, 0, 0}, //6
+    {0, 1, 0, 0}
+  }
+    };
+
+    const int8_t FigureRotationCount[7] = { 1, 4, 4, 2, 2, 2, 4 };
 public:
     TBlock* Block;
     TFigure(TScreen* Screen);
