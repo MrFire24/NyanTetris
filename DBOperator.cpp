@@ -37,7 +37,6 @@ bool DBOperator::tryConnect() {
 			gotoxy(0, 0); cout << "Connecting to Database: " << loading[((int)(deltaTime * 8 + counter)) % 4];
 		}
 	} while (counter != 15);
-	system("cls");
 	return success;
 }
 

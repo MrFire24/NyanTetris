@@ -121,6 +121,7 @@ void TGame::start() {
 
 	while (true) {
 		clearConsole();
+		cout << "\n   Your Score is: " << Score << endl;
 		Higthscores = TetrisDB.tryGetHigthscores(7);
 		if (Screen->tryPrintHightscores()) break;
 		else {
@@ -132,6 +133,7 @@ void TGame::start() {
 	if (Higthscores.data != nullptr) {
 		string input;
 		for (int i = 0; i < Higthscores.row_count; i++) if (Score > stoi(Higthscores.data[1][i])) {
+
 			cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
 			cout << "   Type your name (max length = 8): ";
 			cout << "\x1b[s";
@@ -162,7 +164,7 @@ void TGame::checkControls() {
 	case ('a'):
 		if (Figure->tryMove(0)) {
 			SoundOperator.playSound(300, 20, 60, 74);
-			SillyCat.changeMood(1);
+			SillyCat.changeMood(-1);
 		}
 		else {
 			SoundOperator.playSound(100, 20, 60, 4);
@@ -182,7 +184,7 @@ void TGame::checkControls() {
 	case ('d'):
 		if (Figure->tryMove(2)) {
 			SoundOperator.playSound(300, 20, 60, 74);
-			SillyCat.changeMood(-1);
+			SillyCat.changeMood(1);
 		}
 		else {
 			SoundOperator.playSound(110, 20, 60, 4);
