@@ -9,7 +9,7 @@ TSillyCat::TSillyCat() {
 }
 
 void TSillyCat::updateFace() {
-	return;
+	//return;
 	std::cout << rgb(255, 255, 255);
 	if (_mood >= 2) {
 		gotoxy(_mouthPos[0] - 1, _mouthPos[1]);	std::cout << " vv";
