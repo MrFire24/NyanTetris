@@ -14,4 +14,7 @@ public:
     void delBlock(short x, short y);
 
     void delLine(short line);   
+
+    void printControls();
+    bool tryPrintHightscores();
 };

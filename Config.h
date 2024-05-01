@@ -1,6 +1,6 @@
 #pragma once
 
-#define GAME_VERSION "1.0.2"
+#define GAME_VERSION "1.1.0"
 
 #define FIELD_WIDTH	11
 #define FIELD_HEIGHT 21

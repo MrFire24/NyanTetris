@@ -1,5 +1,9 @@
 #include "TBlock.h"
 
+short rand(short from, short to) {
+    return (rand() % (to - from + 1) + from);
+}
+
 std::string rgb(int r, int g, int b) {
     r = std::min(r, 255); r = std::max(r, 0);
     g = std::min(g, 255); g = std::max(g, 0);
@@ -7,8 +11,13 @@ std::string rgb(int r, int g, int b) {
     return "\x1b[38;2;" + std::to_string(r) + ";" + std::to_string(g) + ";" + std::to_string(b) + "m";
 }
 
-short rand(short from, short to) {
-    return (rand() % (to - from + 1) + from);
+std::string brighRGB(int color) {
+    color %= 1536;
+    return rgb(abs(color - 768) - 256, 512 - abs(color - 512), 512 - abs(color - 1024));
+}
+
+std::string randomBRGB() {
+    return brighRGB(rand(0, 1536));
 }
 
 TBlock::TBlock() { setRandomColor(); }
@@ -23,7 +32,7 @@ void TBlock::setColor(short r, short g, short b) {
 }
 
 void TBlock::setRandomColor() {
-    setColor(rand(1, 8) * 32, rand(1, 8) * 32, rand(1, 8) * 32);
+    color = randomBRGB();
 }
 
 TBlock::~TBlock() {

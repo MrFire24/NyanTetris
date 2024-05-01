@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
 #include "Config.h"
+#include "Defines.h"
 
-#define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
-
-std::string rgb(int r, int g, int b);
 short rand(short from, short to);
+std::string rgb(int r, int g, int b);
+//from 0 to 1536
+std::string brighRGB(int color);
+std::string randomBRGB();
 
 class TBlock {
 private:

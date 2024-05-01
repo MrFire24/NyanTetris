@@ -1,8 +1,7 @@
 #include "DBOperator.h"
 #include "deltaTime.h"
 #include "Config.h"
-
-#define gotoxy(x,y) printf("\x1b[%d;%dH", (y), (x))
+#include "Defines.h"
 
 DBOperator TetrisDB;
 

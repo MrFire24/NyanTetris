@@ -45,6 +45,15 @@
     <ClInclude Include="DBOperator.h">
       <Filter>Исходные файлы\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>Исходные файлы\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TSoundOperator.h">
+      <Filter>Исходные файлы\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TSillyCat.h">
+      <Filter>Исходные файлы\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tetris.cpp">
@@ -66,6 +75,12 @@
       <Filter>Исходные файлы\Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="DBOperator.cpp">
+      <Filter>Исходные файлы\Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSoundOperator.cpp">
+      <Filter>Исходные файлы\Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSillyCat.cpp">
       <Filter>Исходные файлы\Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

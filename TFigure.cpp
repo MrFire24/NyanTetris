@@ -1,7 +1,10 @@
 #include "TFigure.h"
 #include "TBlock.h"
+#include "TSoundOperator.h"
 #include "deltaTime.h"
 #include <iostream>
+#include <thread>
+#include <Windows.h>
 
 TFigure::TFigure(TScreen* Screen) : Screen(Screen) { tryRespawn(); };
 
@@ -77,7 +80,11 @@ bool TFigure::tryRespawn() {
     y = 1;
     rotarion = 0;
     deltaTime.resetTime();
-    return tryPutOn(x, y, rotarion);
+    if (tryPutOn(x, y, rotarion)) {
+        SoundOperator.playSound(250, 20, 60, 44);
+        return true;
+    }
+    return false;
 }
 
 bool TFigure::tryRotate() {
@@ -92,13 +99,20 @@ bool TFigure::tryRotate() {
 bool TFigure::tryMove(short dir) {
     switch (dir){
     case 0: 
-        if (tryPutOn(x - 1, y, rotarion)) return true;
+        if (tryPutOn(x - 1, y, rotarion)) {
+
+            return true;
+        }
         break;
     case 1: 
-        if (tryPutOn(x, y + 1, rotarion)) return true;
+        if (tryPutOn(x, y + 1, rotarion)) {
+            return true;
+        }
         break;
     case 2: 
-        if (tryPutOn(x + 1, y, rotarion)) return true;
+        if (tryPutOn(x + 1, y, rotarion)) { 
+            return true;
+        }
         break;
     }
     return false;

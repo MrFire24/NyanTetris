@@ -149,15 +149,20 @@
     <ClCompile Include="TFigure.cpp" />
     <ClCompile Include="TGame.cpp" />
     <ClCompile Include="TScreen.cpp" />
+    <ClCompile Include="TSillyCat.cpp" />
+    <ClCompile Include="TSoundOperator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
     <ClInclude Include="DBOperator.h" />
+    <ClInclude Include="Defines.h" />
     <ClInclude Include="deltaTime.h" />
     <ClInclude Include="TBlock.h" />
     <ClInclude Include="TFigure.h" />
     <ClInclude Include="TGame.h" />
     <ClInclude Include="TScreen.h" />
+    <ClInclude Include="TSillyCat.h" />
+    <ClInclude Include="TSoundOperator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libmysql.dll" />
