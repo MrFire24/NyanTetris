@@ -68,7 +68,6 @@ bool TFigure::tryPutOn(short newX, short newY, short newRot) {
     x = newX;
     y = newY;
     rotarion = newRot;
-    Screen->draw();
     return true;
 }
 

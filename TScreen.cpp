@@ -12,20 +12,48 @@ TScreen::TScreen() {
         for (short j = 0; j < FIELD_WIDTH; j++)
             Field[i][j] = nullptr;
     }
+
+    FieldChunk = new ConsoleChunk(2, 1, FIELD_WIDTH * 2, FIELD_HEIGHT);
+    DataChunk = new ConsoleChunk(FieldChunk->getPos()[0] + FieldChunk->getSize()[0] + 3, 1, 16, FIELD_HEIGHT);
 }
 
-void TScreen::draw() {
-    gotoxy(0, 0);
+void TScreen::createFrame() {
+    gotoxy(1, 1);
+    cout << rgb(128, 128, 128);
     for (short iy = -1; iy <= FIELD_HEIGHT; iy++) {
         for (short ix = -1; ix <= FIELD_WIDTH; ix++) {
-            if (iy == -1 || iy == FIELD_HEIGHT || ix == -1 || ix == FIELD_WIDTH) {
-                cout << rgb(128, 128, 128) + "##";
-            }
-            else if (getBlock(ix, iy) != nullptr) cout << getBlock(ix, iy)->getColor() + "[]";
-            else cout << rgb(32, 32, 32) + "<>";
+            if (iy == -1 || iy == FIELD_HEIGHT || ix == -1 || ix == FIELD_WIDTH) cout << "##";
+            else cout << "  ";
         }
         cout << endl;
     }
+}
+
+void TScreen::draw() {
+    while (true) {
+        FieldChunk->setCursorPos(1, 1);
+        for (short iy = 0; iy < FIELD_HEIGHT; iy++) {
+            for (short ix = 0; ix < FIELD_WIDTH; ix++) {
+                if (getBlock(ix, iy) != nullptr) {
+                    cout << getBlock(ix, iy)->getColor();
+                    FieldChunk->print("[]");
+                }
+                else {
+                    cout << rgb(32, 32, 32);
+                    FieldChunk->print("<>");
+                }
+            }
+            FieldChunk->nextLine();
+        }
+    }
+}
+
+void TScreen::startDrawing(){
+    FieldThread = new std::thread(&TScreen::draw, this);
+}
+
+void TScreen::stopDrawing() {
+    delete FieldThread;
 }
 
 TBlock* TScreen::getBlock(short x, short y) { return Field[y][x]; }

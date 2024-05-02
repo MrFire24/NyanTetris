@@ -14,7 +14,7 @@
 
 void setUpConsole() {
 	std::cout << "\x1b[8;" << SCREEN_HEIGHT << ";" << SCREEN_WIDTH << "t";
-	std::cout << "\x1b]0;Tetris v" << GAME_VERSION << "\x07";
+	std::cout << "\x1b]0;NyanTetris v" << GAME_VERSION << "\x07";
 
 	RECT desktop;
 	GetWindowRect(GetDesktopWindow(), &desktop);
@@ -95,7 +95,8 @@ void drawSillyCat() {
 }
 
 void TGame::start() {
-	Screen->draw();
+	Screen->createFrame();
+	Screen->startDrawing();
 	drawSillyCat();
 	while (!isGameOver) {
 		if (_kbhit()) checkControls();
@@ -116,6 +117,7 @@ void TGame::start() {
 	}
 	SoundOperator.playSound(20, 500, 90, 118);
 	showCursor();
+	Screen->stopDrawing();
 
 	Table Higthscores;
 
@@ -219,7 +221,6 @@ void TGame::checkControls() {
 	//	/	/	/	/
 	case ('c'):
 		Figure->Block->setRandomColor();
-		Screen->draw();
 		break;
 	case ('r'):
 		//if (!Figure->tryRespawn()) GameOver = true;
@@ -239,7 +240,6 @@ void TGame::checkLines() {
 				Score += 100;
 				SoundOperator.playSound(700, 25, 127, 95);
 				Sleep(100);
-				Screen->draw();
 			}
 			else if (Screen->getBlock(ix, iy) == nullptr) break;
 		}
