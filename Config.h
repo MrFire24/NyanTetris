@@ -8,7 +8,7 @@
 #define SCREEN_WIDTH 44
 #define SCREEN_HEIGHT 24
 
-#define DATABASE_NAME "XXX"
+#define DATABASE_NAME "XXXX"
 #define IP "XXX"
 #define PORT XXX
 #define USERNAME "XXX"
