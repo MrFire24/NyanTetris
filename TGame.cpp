@@ -2,7 +2,6 @@
 #include "TScreen.h"
 #include "TFigure.h"
 #include "deltaTime.h"
-#include "DBOperator.h"
 #include "Defines.h"
 #include "TSoundOperator.h"
 #include "TSillyCat.h"
@@ -11,6 +10,9 @@
 #include <cmath>
 #include <windows.h>
 #include <thread>
+#include <string>
+
+using namespace std;
 
 void setUpConsole() {
 	std::cout << "\x1b[8;" << SCREEN_HEIGHT << ";" << SCREEN_WIDTH << "t";
@@ -68,7 +70,7 @@ TGame::TGame() {
 	Figure = new TFigure(Screen);
 }
 
-float TGame::getSpeed() {
+const float TGame::getSpeed() {
 	return pow(log10((float)Score / 750. + 1.), 2.) + 1.;
 }
 
@@ -96,10 +98,13 @@ void drawSillyCat() {
 
 void TGame::start() {
 	Screen->createFrame();
-	Screen->startDrawing();
+	//Screen->startDrawing();
 	drawSillyCat();
 	while (!isGameOver) {
-		if (_kbhit()) checkControls();
+		if (_kbhit()) {
+			checkControls();
+			Screen->local_draw(Figure->get_x(), Figure->get_y());
+		}
 		deltaTime.updateTime();
 
 		if (deltaTime >= 1. / getSpeed()) {
@@ -108,7 +113,10 @@ void TGame::start() {
 				checkLines();
 				if (!Figure->tryRespawn()) isGameOver = true;
 			}
-			SillyCat.updateFace();;
+			else {
+				Screen->draw();
+			}
+			SillyCat.updateFace();
 		}
 		gotoxy(2 * FIELD_WIDTH + 7, 2);
 		std::cout << rgb(250, 250, 250) + "Score: " << Score;
@@ -117,14 +125,14 @@ void TGame::start() {
 	}
 	SoundOperator.playSound(20, 500, 90, 118);
 	showCursor();
-	Screen->stopDrawing();
+	//Screen->stopDrawing();
 
-	Table Higthscores;
+	//Table Higthscores;
 
 	while (true) {
 		clearConsole();
 		cout << "\n   Your Score is: " << Score << endl;
-		Higthscores = TetrisDB.tryGetHigthscores(7);
+		//Higthscores = TetrisDB.tryGetHigthscores(7);
 		if (Screen->tryPrintHightscores()) break;
 		else {
 			cout << "   If you want to retry connecting again, write \"R\": " ;
@@ -132,29 +140,29 @@ void TGame::start() {
 			if (input != 'R') break;
 		}
 	}
-	if (Higthscores.data != nullptr) {
-		string input;
-		for (int i = 0; i < Higthscores.row_count; i++) if (Score > stoi(Higthscores.data[1][i])) {
+	//if (Higthscores.data != nullptr) {
+	//	string input;
+	//	for (int i = 0; i < Higthscores.row_count; i++) if (Score > stoi(Higthscores.data[1][i])) {
 
-			cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
-			cout << "   Type your name (max length = 8): ";
-			cout << "\x1b[s";
-			while (true) {
-				cout << "\x1b[u" << "                         " << "\x1b[u";
-				cin >> input;
-				input = removeSpecialCharacter(input);
-				if (input == "" || input.length() > 8) continue;
-				else{
-					TetrisDB.tryAddHigthscore(input, Score);
-					Higthscores = TetrisDB.tryGetHigthscores(7);
-					clearConsole();
-					Screen->tryPrintHightscores();
-					break;
-				}
-			}
-			break;
-		}
-	}
+	//		cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
+	//		cout << "   Type your name (max length = 8): ";
+	//		cout << "\x1b[s";
+	//		while (true) {
+	//			cout << "\x1b[u" << "                         " << "\x1b[u";
+	//			cin >> input;
+	//			input = removeSpecialCharacter(input);
+	//			if (input == "" || input.length() > 8) continue;
+	//			else{
+	//				//TetrisDB.tryAddHigthscore(input, Score);
+	//				//Higthscores = TetrisDB.tryGetHigthscores(7);
+	//				clearConsole();
+	//				Screen->tryPrintHightscores();
+	//				break;
+	//			}
+	//		}
+	//		break;
+	//	}
+	//}
 	//while (true);
 }
 
@@ -208,6 +216,7 @@ void TGame::checkControls() {
 			std::cout << rgb(250, 250, 250) + "Score: " << Score;
 			gotoxy(2 * FIELD_WIDTH + 7, 4);
 			std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
+			Screen->local_draw(Figure->get_x(), Figure->get_y());
 		}
 		if (fastMode) {
 			checkLines();

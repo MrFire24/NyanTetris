@@ -12,7 +12,7 @@ private:
 	bool isGameOver = false;
 	bool fastMode;
 
-	float getSpeed();
+	const float getSpeed();
 	void printControls();
 	void checkControls();
 	void checkLines();

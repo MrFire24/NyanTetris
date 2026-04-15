@@ -60,4 +60,6 @@ public:
     bool tryRotate();
     //dir: 0 = left; 1 = down; 2 = right
     bool tryMove(short dir);
+    const short get_x() { return x; }
+    const short get_y() { return y; }
 };

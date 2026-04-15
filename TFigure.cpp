@@ -99,7 +99,6 @@ bool TFigure::tryMove(short dir) {
     switch (dir){
     case 0: 
         if (tryPutOn(x - 1, y, rotarion)) {
-
             return true;
         }
         break;

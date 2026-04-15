@@ -1,5 +1,4 @@
 #include "TScreen.h"
-#include "DBOperator.h"
 #include <iostream>
 
 using std::cout;
@@ -30,31 +29,47 @@ void TScreen::createFrame() {
 }
 
 void TScreen::draw() {
-    while (true) {
-        FieldChunk->setCursorPos(1, 1);
-        for (short iy = 0; iy < FIELD_HEIGHT; iy++) {
-            for (short ix = 0; ix < FIELD_WIDTH; ix++) {
-                if (getBlock(ix, iy) != nullptr) {
-                    cout << getBlock(ix, iy)->getColor();
-                    FieldChunk->print("[]");
-                }
-                else {
-                    cout << rgb(32, 32, 32);
-                    FieldChunk->print("<>");
-                }
+    FieldChunk->setCursorPos(1, 1);
+    for (short iy = 0; iy < FIELD_HEIGHT; iy++) {
+        for (short ix = 0; ix < FIELD_WIDTH; ix++) {
+            if (getBlock(ix, iy) != nullptr) {
+                cout << getBlock(ix, iy)->getColor();
+                FieldChunk->print("[]");
             }
-            FieldChunk->nextLine();
+            else {
+                cout << rgb(32, 32, 32);
+                FieldChunk->print("<>");
+            }
         }
+        FieldChunk->nextLine();
     }
 }
 
-void TScreen::startDrawing(){
-    FieldThread = new std::thread(&TScreen::draw, this);
+void TScreen::local_draw(short x, short y) {
+    FieldChunk->setCursorPos(x, y);
+    for (short iy = std::max(y - 2, 0); iy < std::min(y + 2, FIELD_HEIGHT); iy++) {
+        FieldChunk->setCursorX(x);
+        for (short ix = std::max(x - 2, 0); ix < std::min(x + 2, FIELD_WIDTH); ix++) {
+            if (getBlock(ix, iy) != nullptr) {
+                cout << getBlock(ix, iy)->getColor();
+                FieldChunk->print("[]");
+            }
+            else {
+                cout << rgb(32, 32, 32);
+                FieldChunk->print("<>");
+            }
+        }
+        FieldChunk->nextLine();
+    }
 }
 
-void TScreen::stopDrawing() {
-    delete FieldThread;
-}
+//void TScreen::startDrawing(){
+//    FieldThread = new std::thread(&TScreen::draw, this);
+//}
+//
+//void TScreen::stopDrawing() {
+//    delete FieldThread;
+//}
 
 TBlock* TScreen::getBlock(short x, short y) { return Field[y][x]; }
 
@@ -91,14 +106,14 @@ void TScreen::printControls() {
 }
 
 bool TScreen::tryPrintHightscores() {
-    Table Higthscores = TetrisDB.tryGetHigthscores(7);
-    if (Higthscores.data != nullptr) {
-        cout << "\n   Higthscores Table (TOP 7):" << endl;
-        for (int i = 0; i < Higthscores.row_count; i++) {
-            cout << "   " << i + 1 << ". " << Higthscores.data[0][i] << '\t' << Higthscores.data[1][i] << endl;
-        }
-        return true;
-    }
+    //Table Higthscores = TetrisDB.tryGetHigthscores(7);
+    //if (Higthscores.data != nullptr) {
+    //    cout << "\n   Higthscores Table (TOP 7):" << endl;
+    //    for (int i = 0; i < Higthscores.row_count; i++) {
+    //        cout << "   " << i + 1 << ". " << Higthscores.data[0][i] << '\t' << Higthscores.data[1][i] << endl;
+    //    }
+    //    return true;
+    //}
     cout << "\n   Higthscores Table Loading Failed" << endl;
     return false;
 }

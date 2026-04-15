@@ -9,16 +9,16 @@ private:
     TBlock*** Field;
     ConsoleChunk* FieldChunk;
     ConsoleChunk* DataChunk;
-    std::thread* FieldThread;
+    //std::thread* FieldThread;
     //thread* DataThread;
 
-    void draw();
+    
 public:
     TScreen();
 
     void createFrame();
-    void startDrawing();
-    void stopDrawing();
+    void draw();
+    void local_draw(short x, short y);
 
     TBlock* getBlock(short x, short y);
     void putBlock(short x, short y, TBlock* block);
