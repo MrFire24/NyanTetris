@@ -10,12 +10,12 @@ private:
 	int Score = 0;
 
 	bool isGameOver = false;
-	bool fastMode;
 
 	const float getSpeed();
 	void printControls();
 	void checkControls();
 	void checkLines();
+	void rewriteScores();
 public:
 	TGame();
 

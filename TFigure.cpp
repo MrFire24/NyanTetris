@@ -36,6 +36,8 @@ bool TFigure::tryPutOn(short newX, short newY, short newRot) {
     static short* blockPos;
     static short blockX;
     static short blockY;
+
+    //check if can put on
     for (short iy = 0; iy < 4; iy++) {
         for (short ix = 0; ix < 3; ix++) {
             blockPos = getProcessedBlockPos(ix, iy, newRot);
@@ -48,21 +50,29 @@ bool TFigure::tryPutOn(short newX, short newY, short newRot) {
         }
     }
 
+    //delete old blocks
     for (short iy = 0; iy < 4; iy++) {
         for (short ix = 0; ix < 3; ix++) {
             blockPos = getProcessedBlockPos(ix, iy, rotarion);
             blockX = x + blockPos[0];
             blockY = y + blockPos[1];
-            if (Figures[type][ix][iy] && Screen->getBlock(blockX, blockY) == Block) Screen->delBlock(blockX, blockY);
+            if (Figures[type][ix][iy] && Screen->getBlock(blockX, blockY) == Block) {
+                Screen->delBlock(blockX, blockY);
+                Screen->redrawBlock(blockX, blockY);
+            }
         }
     }
 
+    //put new blocks
     for (short iy = 0; iy < 4; iy++) {
         for (short ix = 0; ix < 3; ix++) {
             blockPos = getProcessedBlockPos(ix, iy, newRot);
             blockX = newX + blockPos[0];
             blockY = newY + blockPos[1];
-            if (Figures[type][ix][iy]) Screen->putBlock(blockX, blockY, Block);
+            if (Figures[type][ix][iy]) {
+                Screen->putBlock(blockX, blockY, Block);
+                Screen->redrawBlock(blockX, blockY);
+            }
         }
     }
     x = newX;

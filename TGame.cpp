@@ -5,6 +5,7 @@
 #include "Defines.h"
 #include "TSoundOperator.h"
 #include "TSillyCat.h"
+#include "leaderboard.h"
 #include <conio.h>
 #include <iostream>
 #include <cmath>
@@ -52,12 +53,7 @@ TGame::TGame() {
 		Screen->printControls();
 
 		std::cin >> answer;
-		if (answer == 'F') {
-			fastMode = true;
-			break;
-		}
 		if (answer == 'S' || answer == '\n') {
-			fastMode = false;
 			break;
 		}
 	}
@@ -96,74 +92,72 @@ void drawSillyCat() {
 	nl; cout << R"(    /      |   )";
 }
 
+void TGame::rewriteScores() {
+	gotoxy(2 * FIELD_WIDTH + 7, 2);
+	std::cout << rgb(250, 250, 250) + "Score: " << Score;
+	gotoxy(2 * FIELD_WIDTH + 7, 4);
+	std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
+}
+
 void TGame::start() {
 	Screen->createFrame();
-	//Screen->startDrawing();
+	Screen->draw();
 	drawSillyCat();
 	while (!isGameOver) {
-		if (_kbhit()) {
+		if (_kbhit()) { // if any key pressed
 			checkControls();
-			Screen->local_draw(Figure->get_x(), Figure->get_y());
 		}
-		deltaTime.updateTime();
 
+		// how to name it?
+		deltaTime.updateTime();
 		if (deltaTime >= 1. / getSpeed()) {
 			deltaTime.resetTime();
 			if (!Figure->tryMove(1)) {
 				checkLines();
 				if (!Figure->tryRespawn()) isGameOver = true;
 			}
-			else {
-				Screen->draw();
-			}
 			SillyCat.updateFace();
 		}
-		gotoxy(2 * FIELD_WIDTH + 7, 2);
-		std::cout << rgb(250, 250, 250) + "Score: " << Score;
-		gotoxy(2 * FIELD_WIDTH + 7, 4);
-		std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
+
+		rewriteScores();
 	}
 	SoundOperator.playSound(20, 500, 90, 118);
 	showCursor();
 	//Screen->stopDrawing();
 
-	//Table Higthscores;
+	Leaderboard lb("scores.txt");
+	lb.load();
+	std::vector<PlayerRecord> records = lb.getRecords();
 
-	while (true) {
-		clearConsole();
-		cout << "\n   Your Score is: " << Score << endl;
-		//Higthscores = TetrisDB.tryGetHigthscores(7);
-		if (Screen->tryPrintHightscores()) break;
-		else {
-			cout << "   If you want to retry connecting again, write \"R\": " ;
-			char input; cin >> input;
-			if (input != 'R') break;
+	clearConsole();
+	cout << "\n   Your Score is: " << Score << endl;
+
+	Screen->tryPrintHightscores(records);
+
+	string input;
+
+	for (int i = 0; records.empty() || (i < records.size() && i < 7); i++) if (records.empty() || Score > records[i].score) {
+
+		cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
+		cout << "   Type your name (max length = 8): ";
+		cout << "\x1b[s";
+		while (true) {
+			cout << "\x1b[u" << "                         " << "\x1b[u";
+			cin >> input;
+			input = removeSpecialCharacter(input);
+			if (input == "" || input.length() > 8) continue;
+			else{
+				lb.addRecord(input, Score);
+				lb.save(); lb.load();
+				records = lb.getRecords();
+				clearConsole();
+				Screen->tryPrintHightscores(records);
+				break;
+			}
 		}
+		break;
 	}
-	//if (Higthscores.data != nullptr) {
-	//	string input;
-	//	for (int i = 0; i < Higthscores.row_count; i++) if (Score > stoi(Higthscores.data[1][i])) {
-
-	//		cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
-	//		cout << "   Type your name (max length = 8): ";
-	//		cout << "\x1b[s";
-	//		while (true) {
-	//			cout << "\x1b[u" << "                         " << "\x1b[u";
-	//			cin >> input;
-	//			input = removeSpecialCharacter(input);
-	//			if (input == "" || input.length() > 8) continue;
-	//			else{
-	//				//TetrisDB.tryAddHigthscore(input, Score);
-	//				//Higthscores = TetrisDB.tryGetHigthscores(7);
-	//				clearConsole();
-	//				Screen->tryPrintHightscores();
-	//				break;
-	//			}
-	//		}
-	//		break;
-	//	}
-	//}
-	//while (true);
+	while (true);
 }
 
 void TGame::checkControls() {
@@ -212,20 +206,10 @@ void TGame::checkControls() {
 		while (Figure->tryMove(1)) {
 			SoundOperator.playSound(390, 15, 50, 74);
 			Score++;
-			gotoxy(2 * FIELD_WIDTH + 7, 2);
-			std::cout << rgb(250, 250, 250) + "Score: " << Score;
-			gotoxy(2 * FIELD_WIDTH + 7, 4);
-			std::cout << rgb(250, 250, 250) + "Speed: " << getSpeed();
-			Screen->local_draw(Figure->get_x(), Figure->get_y());
+			rewriteScores();
 		}
-		if (fastMode) {
-			checkLines();
-			if (!Figure->tryRespawn()) isGameOver = true;
-		}
-		else  {
-			deltaTime.resetTime();
-			if (_kbhit()) checkControls();
-		}
+		deltaTime.resetTime();
+		if (_kbhit()) checkControls();
 		break;
 	//	/	/	/	/
 	case ('c'):
@@ -248,6 +232,7 @@ void TGame::checkLines() {
 				iy++;
 				Score += 100;
 				SoundOperator.playSound(700, 25, 127, 95);
+				Screen->draw();
 				Sleep(100);
 			}
 			else if (Screen->getBlock(ix, iy) == nullptr) break;

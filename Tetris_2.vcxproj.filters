@@ -54,6 +54,9 @@
     <ClInclude Include="ConsoleChunk.h">
       <Filter>Исходные файлы\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="leaderboard.h">
+      <Filter>Исходные файлы\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tetris.cpp">
@@ -83,10 +86,8 @@
     <ClCompile Include="ConsoleChunk.cpp">
       <Filter>Исходные файлы\Resource Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="libmysql.dll">
-      <Filter>Исходные файлы</Filter>
-    </None>
+    <ClCompile Include="leaderboard.cpp">
+      <Filter>Исходные файлы\Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

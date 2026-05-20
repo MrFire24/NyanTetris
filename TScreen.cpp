@@ -1,19 +1,20 @@
 #include "TScreen.h"
+#include "leaderboard.h"
 #include <iostream>
 
 using std::cout;
 using std::endl;
 
-TScreen::TScreen() {
+TScreen::TScreen() : 
+    FieldChunk(2, 1, FIELD_WIDTH * 2, FIELD_HEIGHT), 
+    DataChunk(FieldChunk->getPos()[0] + FieldChunk->getSize()[0] + 3, 1, 16, FIELD_HEIGHT)
+    {
     Field = new TBlock**[FIELD_HEIGHT];
     for (short i = 0; i < FIELD_HEIGHT; i++) {
         Field[i] = new TBlock*[FIELD_WIDTH];
         for (short j = 0; j < FIELD_WIDTH; j++)
             Field[i][j] = nullptr;
     }
-
-    FieldChunk = new ConsoleChunk(2, 1, FIELD_WIDTH * 2, FIELD_HEIGHT);
-    DataChunk = new ConsoleChunk(FieldChunk->getPos()[0] + FieldChunk->getSize()[0] + 3, 1, 16, FIELD_HEIGHT);
 }
 
 void TScreen::createFrame() {
@@ -45,11 +46,23 @@ void TScreen::draw() {
     }
 }
 
+void TScreen::redrawBlock(short x, short y) {
+    FieldChunk->setCursorPos(x * 2 + 1, y + 1);
+    if (getBlock(x, y) != nullptr) {
+        cout << getBlock(x, y)->getColor();
+        FieldChunk->print("[]");
+    }
+    else {
+        cout << rgb(32, 32, 32);
+        FieldChunk->print("<>");
+    }
+}
+
 void TScreen::local_draw(short x, short y) {
-    FieldChunk->setCursorPos(x, y);
+    FieldChunk->setCursorY(y - 2 + 1);
     for (short iy = std::max(y - 2, 0); iy < std::min(y + 2, FIELD_HEIGHT); iy++) {
-        FieldChunk->setCursorX(x);
-        for (short ix = std::max(x - 2, 0); ix < std::min(x + 2, FIELD_WIDTH); ix++) {
+        FieldChunk->setCursorX(x );
+        for (short ix = std::max(x - 2, 0); ix < std::min(x + 3, FIELD_WIDTH); ix++) {
             if (getBlock(ix, iy) != nullptr) {
                 cout << getBlock(ix, iy)->getColor();
                 FieldChunk->print("[]");
@@ -106,14 +119,27 @@ void TScreen::printControls() {
 }
 
 bool TScreen::tryPrintHightscores() {
-    //Table Higthscores = TetrisDB.tryGetHigthscores(7);
-    //if (Higthscores.data != nullptr) {
-    //    cout << "\n   Higthscores Table (TOP 7):" << endl;
-    //    for (int i = 0; i < Higthscores.row_count; i++) {
-    //        cout << "   " << i + 1 << ". " << Higthscores.data[0][i] << '\t' << Higthscores.data[1][i] << endl;
-    //    }
-    //    return true;
-    //}
-    cout << "\n   Higthscores Table Loading Failed" << endl;
+    Leaderboard lb("scores.txt");
+    lb.load();
+    std::vector<PlayerRecord> records = lb.getRecords();
+    cout << "\n   Higthscores Table (TOP 7):" << endl;
+    for (int i = 0; i < records.size() && i < 7; i++) {
+        cout << "   " << i + 1 << ". " << records[i].name << '\t' << records[i].score << endl;
+    }
+    return true;
+    cout << "\n   Higthscores Table Loading Failed or Empty" << endl;
     return false;
 }
+
+bool TScreen::tryPrintHightscores(std::vector<PlayerRecord> records) {
+    if (!records.empty()) {
+        cout << "\n   Higthscores Table (TOP 7):" << endl;
+        for (int i = 0; i < records.size() && i < 7; i++) {
+            cout << "   " << i + 1 << ". " << records[i].name << '\t' << records[i].score << endl;
+        }
+        return true;
+    }
+    cout << "\n   Higthscores Table Loading Failed or Empty" << endl;
+    return false;
+}
+
