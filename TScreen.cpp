@@ -7,8 +7,8 @@ using std::endl;
 
 TScreen::TScreen() : 
     FieldChunk(2, 1, FIELD_WIDTH * 2, FIELD_HEIGHT), 
-    DataChunk(FieldChunk->getPos()[0] + FieldChunk->getSize()[0] + 3, 1, 16, FIELD_HEIGHT)
-    {
+    DataChunk(FieldChunk.getPos()[0] + FieldChunk.getSize()[0] + 3, 1, 16, FIELD_HEIGHT)
+{
     Field = new TBlock**[FIELD_HEIGHT];
     for (short i = 0; i < FIELD_HEIGHT; i++) {
         Field[i] = new TBlock*[FIELD_WIDTH];
@@ -30,49 +30,49 @@ void TScreen::createFrame() {
 }
 
 void TScreen::draw() {
-    FieldChunk->setCursorPos(1, 1);
+    FieldChunk.setCursorPos(1, 1);
     for (short iy = 0; iy < FIELD_HEIGHT; iy++) {
         for (short ix = 0; ix < FIELD_WIDTH; ix++) {
             if (getBlock(ix, iy) != nullptr) {
                 cout << getBlock(ix, iy)->getColor();
-                FieldChunk->print("[]");
+                FieldChunk.print("[]");
             }
             else {
                 cout << rgb(32, 32, 32);
-                FieldChunk->print("<>");
+                FieldChunk.print("<>");
             }
         }
-        FieldChunk->nextLine();
+        FieldChunk.nextLine();
     }
 }
 
 void TScreen::redrawBlock(short x, short y) {
-    FieldChunk->setCursorPos(x * 2 + 1, y + 1);
+    FieldChunk.setCursorPos(x * 2 + 1, y + 1);
     if (getBlock(x, y) != nullptr) {
         cout << getBlock(x, y)->getColor();
-        FieldChunk->print("[]");
+        FieldChunk.print("[]");
     }
     else {
         cout << rgb(32, 32, 32);
-        FieldChunk->print("<>");
+        FieldChunk.print("<>");
     }
 }
 
 void TScreen::local_draw(short x, short y) {
-    FieldChunk->setCursorY(y - 2 + 1);
+    FieldChunk.setCursorY(y - 2 + 1);
     for (short iy = std::max(y - 2, 0); iy < std::min(y + 2, FIELD_HEIGHT); iy++) {
-        FieldChunk->setCursorX(x );
+        FieldChunk.setCursorX(x );
         for (short ix = std::max(x - 2, 0); ix < std::min(x + 3, FIELD_WIDTH); ix++) {
             if (getBlock(ix, iy) != nullptr) {
                 cout << getBlock(ix, iy)->getColor();
-                FieldChunk->print("[]");
+                FieldChunk.print("[]");
             }
             else {
                 cout << rgb(32, 32, 32);
-                FieldChunk->print("<>");
+                FieldChunk.print("<>");
             }
         }
-        FieldChunk->nextLine();
+        FieldChunk.nextLine();
     }
 }
 
