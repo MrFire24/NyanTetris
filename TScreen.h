@@ -17,8 +17,7 @@ public:
 
     void createFrame();
     void draw();
-    void redrawBlock(short x, short y);
-    void local_draw(short x, short y);
+    void drawBlock(short x, short y);
 
     TBlock* getBlock(short x, short y);
     void putBlock(short x, short y, TBlock* block);

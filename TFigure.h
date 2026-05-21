@@ -7,7 +7,7 @@ private:
     TScreen* Screen;
     short type;
     short x, y;
-    short rotarion = 0;
+    short rotation = 0;
     //rotarion: 0 = 0deg; 1 = 90deg; 2 = 180deg; 3 = 270deg;
 
     bool tryPutOn(short newX, short newY, short newRot);
@@ -55,6 +55,8 @@ private:
 public:
     TBlock* Block;
     TFigure(TScreen* Screen);
+
+    void redraw();
 
     bool tryRespawn();
     bool tryRotate();

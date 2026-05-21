@@ -38,13 +38,13 @@ void printControls() {
 }
 
 TGame::TGame() {
-	system("cls"); //обязательно для того что - бы в собраном проекте работали escape-последовательности(хз почему так)
+	system("cls"); //necessary for escape sequences to work in the compiled project (idk why)
 	setUpConsole();
 
 	//MessageBox(NULL, L"Error text", L"Error", MB_ICONERROR);
 
 
-	char answer;
+	string answer;
 	while (true) {
 		clearConsole();
 
@@ -52,8 +52,22 @@ TGame::TGame() {
 
 		Screen->printControls();
 
-		std::cin >> answer;
-		if (answer == 'S' || answer == '\n') {
+		getline(std::cin, answer);
+
+		if (answer == "S") {
+			break;
+		}
+		//cheats
+		if (answer == "svcheats") {
+			Score = 5'000;
+			SoundOperator.playSound(350, 300, 80, 53); // uuh
+			Sleep(1000);
+			break;
+		}
+		if (answer == "uuddlrlrba" || answer == "UUDDLRLRBA") {
+			Score = 10'000;
+			SoundOperator.playSound(350, 300, 80, 52); // aah
+			Sleep(1000);
 			break;
 		}
 	}
@@ -108,7 +122,6 @@ void TGame::start() {
 			checkControls();
 		}
 
-		// how to name it?
 		deltaTime.updateTime();
 		if (deltaTime >= 1. / getSpeed()) {
 			deltaTime.resetTime();
@@ -123,9 +136,8 @@ void TGame::start() {
 	}
 	SoundOperator.playSound(20, 500, 90, 118);
 	showCursor();
-	//Screen->stopDrawing();
 
-	Leaderboard lb("scores.txt");
+	Leaderboard lb("leaderboard.dat");
 	lb.load();
 	std::vector<PlayerRecord> records = lb.getRecords();
 
@@ -136,34 +148,35 @@ void TGame::start() {
 
 	string input;
 
-	for (int i = 0; records.empty() || (i < records.size() && i < 7); i++) if (records.empty() || Score > records[i].score) {
-
-		cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
-		cout << "   Type your name (max length = 8): ";
-		cout << "\x1b[s";
-		while (true) {
-			cout << "\x1b[u" << "                         " << "\x1b[u";
-			cin >> input;
-			input = removeSpecialCharacter(input);
-			if (input == "" || input.length() > 8) continue;
-			else{
-				lb.addRecord(input, Score);
-				lb.save(); lb.load();
-				records = lb.getRecords();
-				clearConsole();
-				Screen->tryPrintHightscores(records);
-				break;
+	for (int i = 0; records.empty() || (i < records.size() && i < 7); i++) 
+		if (records.size() < 7 || Score > records[i].score) {
+			cout << "\n\n   Your result is worthy of being \n   recorded in a Higthscores Table!" << endl;
+			cout << "   Type your name (max length = 8): ";
+			cout << "\x1b[s";
+			while (true) {
+				cout << "\x1b[u" << "                         " << "\x1b[u";
+				cin >> input;
+				input = removeSpecialCharacter(input);
+				if (input == "" || input.length() > 8) continue;
+				else{
+					lb.addRecord(input, Score);
+					lb.save(); lb.load();
+					records = lb.getRecords();
+					clearConsole();
+					Screen->tryPrintHightscores(records);
+					break;
+				}
 			}
+			break;
 		}
-		break;
-	}
-	while (true);
+	//while (true);
 }
 
 void TGame::checkControls() {
 	static char key;
 	key = tolower(_getch());
 
+	Sleep(35);
 	switch (key) {
 	case ('a'):
 		if (Figure->tryMove(0)) {
@@ -207,6 +220,7 @@ void TGame::checkControls() {
 			SoundOperator.playSound(390, 15, 50, 74);
 			Score++;
 			rewriteScores();
+			Sleep(1);
 		}
 		deltaTime.resetTime();
 		if (_kbhit()) checkControls();
@@ -214,10 +228,14 @@ void TGame::checkControls() {
 	//	/	/	/	/
 	case ('c'):
 		Figure->Block->setRandomColor();
+		Figure->redraw();
 		break;
-	case ('r'):
-		//if (!Figure->tryRespawn()) GameOver = true;
-		//Score++;
+	case ('p'):
+		while (true) {
+			Sleep(50);
+			key = tolower(_getch());
+			if (key == 'p') break;
+		}
 		break;
 	default:
 		break;
@@ -233,7 +251,7 @@ void TGame::checkLines() {
 				Score += 100;
 				SoundOperator.playSound(700, 25, 127, 95);
 				Screen->draw();
-				Sleep(100);
+				Sleep(80);
 			}
 			else if (Screen->getBlock(ix, iy) == nullptr) break;
 		}

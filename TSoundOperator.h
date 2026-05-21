@@ -15,7 +15,7 @@ struct soundParams {
 
 class TSoundOperator {
 private:
-    HMIDIOUT _device; // Объявление _device в качестве члена класса
+    HMIDIOUT _device; // MIDI output device handle
     void _playSound(soundParams params);
 public:
     TSoundOperator();
@@ -27,149 +27,149 @@ extern TSoundOperator SoundOperator;
 
 namespace instruments {
     enum {
-        AcousticGrandPiano = 0, // Акустическое рояльное пианино: классический звук рояля
-        BrightAcousticPiano,    // Яркое акустическое пианино: аналогично акустическому пианино, но с ярким звуком
-        ElectricGrandPiano,     // Электрическое рояльное пианино: электрическая версия рояля с ярким звуком
-        HonkyTonkPiano,         // Хонки-тонк пианино: имитация старого изношенного пианино с характерным звуком
-        ElectricPiano1,         // Электрическое пианино 1: классическое электрическое пианино
-        ElectricPiano2,         // Электрическое пианино 2: второй вариант электрического пианино
-        Harpsichord,            // Челеста: инструмент с звучанием похожим на челесту
-        Clavi,                  // Клави: электронный инструмент с острым звуком
-        Celesta,                // Челеста: инструмент с кристальным звуком
-        Glockenspiel,           // Колокольчики: яркий, звонкий и чистый звук
-        MusicBox,               // Музыкальная шкатулка: звук шкатулки с мелодией
-        Vibraphone,             // Вибрафон: мягкий, вибрирующий звук, похожий на ксилофон
-        Marimba,                // Маримба: инструмент с богатым, мелодичным звуком
-        Xylophone,              // Ксилофон: яркий и чистый звук, похожий на колокольчики
-        TubularBells,           // Трубчатые колокола: глубокий и мягкий звук, похожий на колокольчики
-        Dulcimer,               // Дульсимер: теплый и приятный звук
-        DrawbarOrgan,           // Орган: классический звук органа
-        PercussiveOrgan,        // Ударный орган: орган с более ярким и отчетливым звуком
-        RockOrgan,              // Рок-орган: орган с ярким и агрессивным звучанием
-        ChurchOrgan,            // Церковный орган: мощный и глубокий звук органа
-        ReedOrgan,              // Духовой орган: звук органа с более мягким звучанием
-        Accordion,              // Аккордеон: яркий и динамичный звук аккордеона
-        Harmonica,              // Гармоника: звук гармоники с мелодичным звучанием
-        TangoAccordion,         // Танго аккордеон: яркий и экзотический звук аккордеона
-        AcousticGuitarNylon,    // Акустическая гитара (нейлоновые струны): мягкий и приятный звук гитары
-        AcousticGuitarSteel,    // Акустическая гитара (стальные струны): более яркий и резкий звук гитары
-        ElectricGuitarJazz,     // Электрогитара (джазовая): мягкий и приятный звук электрогитары
-        ElectricGuitarClean,    // Электрогитара (чистый звук): чистый и яркий звук электрогитары
-        ElectricGuitarMuted,    // Электрогитара (заглушенный звук): звук гитары с заглушенными нотами
-        OverdrivenGuitar,       // Перегруженная гитара: гитара с перегруженным звуком
-        DistortionGuitar,       // Дисторшн гитара: гитара с искаженным звуком
-        GuitarHarmonics,        // Гитарные гармоники: звук гитары с гармониками
-        AcousticBass,           // Акустический бас: мягкий и глубокий звук бас-гитары
-        ElectricBassFinger,     // Электробас (игра пальцами): звук электрической бас-гитары
-        ElectricBassPick,       // Электробас (игра медиатором): звук электрической бас-гитары
-        FretlessBass,           // Бас без ладов: мягкий и гладкий звук бас-гитары без ладов
-        SlapBass1,              // Слэп-бас 1: звук бас-гитары с характерным слэп-бас звучанием
-        SlapBass2,              // Слэп-бас 2: второй вариант звука бас-гитары с характерным слэп-бас звучанием
-        SynthBass1,             // Синтезаторный бас 1: синтезаторный звук баса
-        SynthBass2,             // Синтезаторный бас 2: второй вариант синтезаторного звука баса
-        Violin,                 // Скрипка: мелодичный и эмоциональный звук скрипки
-        Viola,                  // Альт: более глубокий и мягкий звук альта
-        Cello,                  // Виолончель: глубокий и эмоциональный звук виолончели
-        Contrabass,             // Контрабас: мощный и глубокий звук контрабаса
-        TremoloStrings,         // Струнные с трепетом: звук струнных с дрожащим эффектом
-        PizzicatoStrings,       // Струнные пиццикато: звук струнных с пиццикато эффектом
-        OrchestralHarp,         // Оркестровая арфа: мягкий и кристальный звук арфы
-        Timpani,                // Тимпани: мощный и глубокий звук тимпанов
-        StringEnsemble1,        // Струнный ансамбль 1: звук ансамбля струнных инструментов
-        StringEnsemble2,        // Струнный ансамбль 2: второй вариант звука струнного ансамбля
-        SynthStrings1,          // Синтезаторные струнные 1: синтезаторный звук струнных инструментов
-        SynthStrings2,          // Синтезаторные струнные 2: второй вариант синтезаторного звука струнных инструментов
+        AcousticGrandPiano = 0, // Acoustic grand piano: classic grand piano sound
+        BrightAcousticPiano,    // Bright acoustic piano: similar to grand piano but with a brighter tone
+        ElectricGrandPiano,     // Electric grand piano: electric version of the grand piano with a bright sound
+        HonkyTonkPiano,         // Honky-tonk piano: imitation of an old worn-out piano with a characteristic sound
+        ElectricPiano1,         // Electric piano 1: classic electric piano
+        ElectricPiano2,         // Electric piano 2: second variant of the electric piano
+        Harpsichord,            // Celesta: instrument with a sound similar to a celesta
+        Clavi,                  // Clavi: electronic instrument with a sharp sound
+        Celesta,                // Celesta: instrument with a crystal-clear sound
+        Glockenspiel,           // Glockenspiel: bright, ringing and pure sound
+        MusicBox,               // Music box: music box sound with a melody
+        Vibraphone,             // Vibraphone: soft, vibrating sound, similar to a xylophone
+        Marimba,                // Marimba: instrument with a rich, melodic sound
+        Xylophone,              // Xylophone: bright and pure sound, similar to a glockenspiel
+        TubularBells,           // Tubular bells: deep and soft sound, similar to a glockenspiel
+        Dulcimer,               // Dulcimer: warm and pleasant sound
+        DrawbarOrgan,           // Organ: classic organ sound
+        PercussiveOrgan,        // Percussive organ: organ with a brighter and more distinct sound
+        RockOrgan,              // Rock organ: organ with a bright and aggressive sound
+        ChurchOrgan,            // Church organ: powerful and deep organ sound
+        ReedOrgan,              // Reed organ: organ sound with a softer tone
+        Accordion,              // Accordion: bright and dynamic accordion sound
+        Harmonica,              // Harmonica: harmonica sound with a melodic tone
+        TangoAccordion,         // Tango accordion: bright and exotic accordion sound
+        AcousticGuitarNylon,    // Acoustic guitar (nylon strings): soft and pleasant guitar sound
+        AcousticGuitarSteel,    // Acoustic guitar (steel strings): brighter and sharper guitar sound
+        ElectricGuitarJazz,     // Electric guitar (jazz): soft and pleasant electric guitar sound
+        ElectricGuitarClean,    // Electric guitar (clean): clean and bright electric guitar sound
+        ElectricGuitarMuted,    // Electric guitar (muted): guitar sound with muted notes
+        OverdrivenGuitar,       // Overdriven guitar: guitar with an overdriven sound
+        DistortionGuitar,       // Distortion guitar: guitar with a distorted sound
+        GuitarHarmonics,        // Guitar harmonics: guitar sound with harmonics
+        AcousticBass,           // Acoustic bass: soft and deep bass guitar sound
+        ElectricBassFinger,     // Electric bass (fingered): electric bass guitar sound
+        ElectricBassPick,       // Electric bass (picked): electric bass guitar sound
+        FretlessBass,           // Fretless bass: soft and smooth fretless bass guitar sound
+        SlapBass1,              // Slap bass 1: bass guitar with a characteristic slap bass sound
+        SlapBass2,              // Slap bass 2: second variant of the bass guitar with a characteristic slap bass sound
+        SynthBass1,             // Synth bass 1: synthesized bass sound
+        SynthBass2,             // Synth bass 2: second variant of the synthesized bass sound
+        Violin,                 // Violin: melodic and emotional violin sound
+        Viola,                  // Viola: deeper and softer viola sound
+        Cello,                  // Cello: deep and emotional cello sound
+        Contrabass,             // Contrabass: powerful and deep double bass sound
+        TremoloStrings,         // Tremolo strings: string sound with a trembling effect
+        PizzicatoStrings,       // Pizzicato strings: string sound with a pizzicato effect
+        OrchestralHarp,         // Orchestral harp: soft and crystal-clear harp sound
+        Timpani,                // Timpani: powerful and deep timpani sound
+        StringEnsemble1,        // String ensemble 1: ensemble of string instruments sound
+        StringEnsemble2,        // String ensemble 2: second variant of the string ensemble sound
+        SynthStrings1,          // Synth strings 1: synthesized string instruments sound
+        SynthStrings2,          // Synth strings 2: second variant of the synthesized string sound
 
 
-        ChoirAahs,              // Хор: звук хора "аа"
-        VoiceOohs,              // Голоса: звук "уу"
-        SynthVoice,             // Синтетический голос: синтетический звук голоса
+        ChoirAahs,              // Choir: choir "aah" sound
+        VoiceOohs,              // Voices: "ooh" sound
+        SynthVoice,             // Synth voice: synthesized voice sound
 
 
-        OrchestraHit,           // Оркестровое ударение: мощный ударный звук оркестра
-        Trumpet,                // Труба: яркий и пронзительный звук трубы
-        Trombone,               // Тромбон: мягкий и глубокий звук тромбона
-        Tuba,                   // Туба: мощный и глубокий звук тубы
-        MutedTrumpet,           // Заглушенная труба: звук трубы с заглушенным эффектом
-        FrenchHorn,             // Валторна: красивый и эмоциональный звук валторны
-        BrassSection,           // Духовая секция: звук духового оркестра
-        SynthBrass1,            // Синтезаторные духовые 1: синтезаторный звук духовых инструментов
-        SynthBrass2,            // Синтезаторные духовые 2: второй вариант синтезаторного звука духовых инструментов
-        SopranoSax,             // Сопрано-саксофон: яркий и пронзительный звук сопрано-саксофона
-        AltoSax,                // Альт-саксофон: глубокий и мягкий звук альт-саксофона
-        TenorSax,               // Тенор-саксофон: мягкий и эмоциональный звук тенор-саксофона
-        BaritoneSax,            // Баритон-саксофон: глубокий и теплый звук баритон-саксофона
-        Oboe,                   // Гобой: яркий и мелодичный звук гобоя
-        EnglishHorn,            // Английский рожок: мягкий и глубокий звук английского рожка
-        Bassoon,                // Фагот: глубокий и темный звук фагота
-        Clarinet,               // Кларнет: мягкий и мелодичный звук кларнета
-        Piccolo,                // Пикколо: яркий и пронзительный звук пикколо
-        Flute,                  // Флейта: чистый и прозрачный звук флейты
-        Recorder,               // Блокфлейта: мягкий и приятный звук блокфлейты
-        PanFlute,               // Пан-флейта: экзотический и мелодичный звук пан-флейты
-        BlownBottle,            // Сквозная бутылка: звук свиста через бутылку
-        Shakuhachi,             // Шакухачи: традиционный японский инструмент с мелодичным звучанием
-        Whistle,                // Свисток: обычный свисток
-        Ocarina,                // Окарина: мягкий и приятный звук окарины
+        OrchestraHit,           // Orchestra hit: powerful orchestral hit sound
+        Trumpet,                // Trumpet: bright and piercing trumpet sound
+        Trombone,               // Trombone: soft and deep trombone sound
+        Tuba,                   // Tuba: powerful and deep tuba sound
+        MutedTrumpet,           // Muted trumpet: trumpet sound with a mute effect
+        FrenchHorn,             // French horn: beautiful and emotional French horn sound
+        BrassSection,           // Brass section: brass orchestra sound
+        SynthBrass1,            // Synth brass 1: synthesized brass instruments sound
+        SynthBrass2,            // Synth brass 2: second variant of the synthesized brass sound
+        SopranoSax,             // Soprano saxophone: bright and piercing soprano saxophone sound
+        AltoSax,                // Alto saxophone: deep and soft alto saxophone sound
+        TenorSax,               // Tenor saxophone: soft and emotional tenor saxophone sound
+        BaritoneSax,            // Baritone saxophone: deep and warm baritone saxophone sound
+        Oboe,                   // Oboe: bright and melodic oboe sound
+        EnglishHorn,            // English horn: soft and deep English horn sound
+        Bassoon,                // Bassoon: deep and dark bassoon sound
+        Clarinet,               // Clarinet: soft and melodic clarinet sound
+        Piccolo,                // Piccolo: bright and piercing piccolo sound
+        Flute,                  // Flute: pure and transparent flute sound
+        Recorder,               // Recorder: soft and pleasant recorder sound
+        PanFlute,               // Pan flute: exotic and melodic pan flute sound
+        BlownBottle,            // Blown bottle: whistling sound through a bottle
+        Shakuhachi,             // Shakuhachi: traditional Japanese instrument with a melodic sound
+        Whistle,                // Whistle: ordinary whistle
+        Ocarina,                // Ocarina: soft and pleasant ocarina sound
 
 
-        Lead1Square,            // Лид 1: квадратная форма волны, яркий и синтезаторный звук
-        Lead2Sawtooth,          // Лид 2: пилообразная форма волны, острый и режущий звук
-        Lead3Calliope,          // Лид 3: яркий и экзотический звук синтезатора
-        Lead4Chiff,             // Лид 4: звук с выделенными высокими частотами
-        Lead5Charang,           // Лид 5: мягкий и приятный звук с характерным эффектом
-        Lead6Voice,             // Лид 6: звук с выделенными низкими частотами
-        Lead7Fifths,            // Лид 7: звук с аккордами квинт
-        Lead8BassLead,          // Лид 8: звук с характерным басом
+        Lead1Square,            // Lead 1: square wave, bright and synthesized sound
+        Lead2Sawtooth,          // Lead 2: sawtooth wave, sharp and cutting sound
+        Lead3Calliope,          // Lead 3: bright and exotic synthesizer sound
+        Lead4Chiff,             // Lead 4: sound with emphasized high frequencies
+        Lead5Charang,           // Lead 5: soft and pleasant sound with a characteristic effect
+        Lead6Voice,             // Lead 6: sound with emphasized low frequencies
+        Lead7Fifths,            // Lead 7: sound with fifth chords
+        Lead8BassLead,          // Lead 8: sound with a characteristic bass
 
 
-        Pad1NewAge,             // Пэд 1: звук с новой эпохой
-        Pad2Warm,               // Пэд 2: мягкий и теплый звук пэда
-        Pad3Polysynth,          // Пэд 3: полисинтезаторный звук пэда
-        Pad4Choir,              // Пэд 4: звук пэда, похожий на хор
-        Pad5Bowed,              // Пэд 5: звук пэда, похожий на смычковые инструменты
-        Pad6Metallic,           // Пэд 6: металлический звук пэда
-        Pad7Halo,               // Пэд 7: звук пэда с эффектом гало
-        Pad8Sweep,              // Пэд 8: звук пэда с эффектом свипа
+        Pad1NewAge,             // Pad 1: new age sound
+        Pad2Warm,               // Pad 2: soft and warm pad sound
+        Pad3Polysynth,          // Pad 3: polysynth pad sound
+        Pad4Choir,              // Pad 4: pad sound similar to a choir
+        Pad5Bowed,              // Pad 5: pad sound similar to bowed instruments
+        Pad6Metallic,           // Pad 6: metallic pad sound
+        Pad7Halo,               // Pad 7: pad sound with a halo effect
+        Pad8Sweep,              // Pad 8: pad sound with a sweep effect
 
 
-        FX1Rain,                // Звук 1: звук дождя
-        FX2Soundtrack,          // Звук 2: звук саундтрека
-        FX3Crystal,             // Звук 3: кристальный звук
-        FX4Atmosphere,          // Звук 4: звук атмосферы
-        FX5Brightness,          // Звук 5: яркий звук
-        FX6Goblins,             // Звук 6: звук гоблинов
-        FX7Echoes,              // Звук 7: эхо
-        FX8SciFi,               // Звук 8: звук фантастики
+        FX1Rain,                // FX 1: rain sound
+        FX2Soundtrack,          // FX 2: soundtrack sound
+        FX3Crystal,             // FX 3: crystal sound
+        FX4Atmosphere,          // FX 4: atmosphere sound
+        FX5Brightness,          // FX 5: bright sound
+        FX6Goblins,             // FX 6: goblin sound
+        FX7Echoes,              // FX 7: echo
+        FX8SciFi,               // FX 8: sci-fi sound
 
 
-        Sitar,                  // Ситар: яркий и экзотический звук ситара
-        Banjo,                  // Банджо: звук банджо с характерным тембром
-        Shamisen,               // Самисен: японский струнный инструмент с мелодичным звучанием
-        Koto,                   // Кото: традиционный японский инструмент с мягким звучанием
-        Kalimba,                // Калимба: африканский инструмент с мелодичным звучанием
-        Bagpipe,                // Волынка: грубый и мощный звук волынки
-        Fiddle,                 // Скрипка (народная): яркий и динамичный звук скрипки
-        Shanai,                 // Шанаи: традиционный индийский инструмент с ярким звучанием
-        TinkleBell,             // Колокольчик: звук маленького колокольчика
-        Agogo,                  // Агого: звук агого с характерным ритмом
-        SteelDrums,             // Стальные барабаны: яркий и веселый звук стальных барабанов
-        Woodblock,              // Деревянный блок: звук деревянного блока с ритмическим эффектом
-        TaikoDrum,              // Тайко-барабан: мощный и глубокий звук тайко-барабана
-        MelodicTom,             // Мелодичный том: мягкий и приятный звук тома
-        SynthDrum,              // Синтезаторный барабан: синтетический звук барабана
+        Sitar,                  // Sitar: bright and exotic sitar sound
+        Banjo,                  // Banjo: banjo sound with a characteristic timbre
+        Shamisen,               // Shamisen: Japanese string instrument with a melodic sound
+        Koto,                   // Koto: traditional Japanese instrument with a soft sound
+        Kalimba,                // Kalimba: African instrument with a melodic sound
+        Bagpipe,                // Bagpipe: rough and powerful bagpipe sound
+        Fiddle,                 // Fiddle (folk violin): bright and dynamic violin sound
+        Shanai,                 // Shanai: traditional Indian instrument with a bright sound
+        TinkleBell,             // Tinkle bell: small bell sound
+        Agogo,                  // Agogo: agogo sound with a characteristic rhythm
+        SteelDrums,             // Steel drums: bright and cheerful steel drum sound
+        Woodblock,              // Woodblock: wooden block sound with a rhythmic effect
+        TaikoDrum,              // Taiko drum: powerful and deep taiko drum sound
+        MelodicTom,             // Melodic tom: soft and pleasant tom sound
+        SynthDrum,              // Synth drum: synthesized drum sound
 
 
-        ReverseCymbal,          // Обратный тарелочный звук: звук тарелки в обратном направлении
-        GuitarFretNoise,        // Шум струнной гитары: шум при переборе струн гитары
+        ReverseCymbal,          // Reverse cymbal: cymbal sound played in reverse
+        GuitarFretNoise,        // Guitar fret noise: noise from strumming guitar strings
 
 
-        BreathNoise,            // Шум дыхания: шум дыхания
-        Seashore,               // Морской берег: звук морского прибоя
-        BirdTweet,              // Пение птиц: звук пения птиц
-        TelephoneRing,          // Телефонный звон: звук звонка телефона
-        Helicopter,             // Вертолет: звук вертолета
-        Applause,               // Овации: аплодисменты
-        Gunshot                 // Выстрел: звук выстрела из пистолета
+        BreathNoise,            // Breath noise: breathing noise
+        Seashore,               // Seashore: ocean surf sound
+        BirdTweet,              // Bird tweet: bird singing sound
+        TelephoneRing,          // Telephone ring: telephone ringing sound
+        Helicopter,             // Helicopter: helicopter sound
+        Applause,               // Applause: audience applause
+        Gunshot                 // Gunshot: pistol shot sound
     };
 }

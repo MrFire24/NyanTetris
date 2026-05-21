@@ -17,14 +17,14 @@ TSoundOperator::~TSoundOperator() {
 }
 
 void TSoundOperator::_playSound(soundParams params) {
-    // Вычисление MIDI ноты
+    // MIDI Note Calculation
     int Note = (int)(round((log(params.freq) - log(440.0)) / log(2.0) * 12 + 69));
-    int Phrase = (params.velocity * 256 + Note) * 256 + 144; // MIDI сообщение для запуска ноты
+    int Phrase = (params.velocity * 256 + Note) * 256 + 144; // MIDI message to trigger a note
     midiOutShortMsg(this->_device, (256 * params.instrument) + 192);
-    midiOutShortMsg(this->_device, Phrase); // Используйте this->_device
-    Sleep((int)(params.duration * (1 / params.tempo + 0.0001))); // Пауза
-    Phrase = (params.velocity * 256 + Note) * 256 + 128; // MIDI сообщение для остановки ноты
-    midiOutShortMsg(this->_device, Phrase); // Используйте this->_device
+    midiOutShortMsg(this->_device, Phrase); // Use this->_device
+    Sleep((int)(params.duration * (1 / params.tempo + 0.0001))); // Pause
+    Phrase = (params.velocity * 256 + Note) * 256 + 128; // MIDI message to stop a note
+    midiOutShortMsg(this->_device, Phrase); // Use this->_device
 }
 
 void TSoundOperator::playSound(int freq, int duration, int velocity, int instrument, float tempo) {

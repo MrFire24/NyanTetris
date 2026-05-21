@@ -46,7 +46,7 @@ void TScreen::draw() {
     }
 }
 
-void TScreen::redrawBlock(short x, short y) {
+void TScreen::drawBlock(short x, short y) {
     FieldChunk.setCursorPos(x * 2 + 1, y + 1);
     if (getBlock(x, y) != nullptr) {
         cout << getBlock(x, y)->getColor();
@@ -57,32 +57,6 @@ void TScreen::redrawBlock(short x, short y) {
         FieldChunk.print("<>");
     }
 }
-
-void TScreen::local_draw(short x, short y) {
-    FieldChunk.setCursorY(y - 2 + 1);
-    for (short iy = std::max(y - 2, 0); iy < std::min(y + 2, FIELD_HEIGHT); iy++) {
-        FieldChunk.setCursorX(x );
-        for (short ix = std::max(x - 2, 0); ix < std::min(x + 3, FIELD_WIDTH); ix++) {
-            if (getBlock(ix, iy) != nullptr) {
-                cout << getBlock(ix, iy)->getColor();
-                FieldChunk.print("[]");
-            }
-            else {
-                cout << rgb(32, 32, 32);
-                FieldChunk.print("<>");
-            }
-        }
-        FieldChunk.nextLine();
-    }
-}
-
-//void TScreen::startDrawing(){
-//    FieldThread = new std::thread(&TScreen::draw, this);
-//}
-//
-//void TScreen::stopDrawing() {
-//    delete FieldThread;
-//}
 
 TBlock* TScreen::getBlock(short x, short y) { return Field[y][x]; }
 
@@ -110,16 +84,16 @@ void TScreen::printControls() {
    S - down 		(\|||/)
    Space - quick down (full down)
 
-   Mouse Click - pause	 /\_/\
-   Enter - continue	( o.o )
-   C - change color	 > ^ <
-	
-  (Affects only the quick down function)
-  FastMode or SafeMode (F/S): )";
+   P - pause/continue  /\_/\
+   C - change color   ( o.o )
+                       >   <
+   PLEASE READ CONTROLS BEFORE STARTING
+
+  Write 'S' to start: )";
 }
 
 bool TScreen::tryPrintHightscores() {
-    Leaderboard lb("scores.txt");
+    Leaderboard lb("leaderboard.dat");
     lb.load();
     std::vector<PlayerRecord> records = lb.getRecords();
     cout << "\n   Higthscores Table (TOP 7):" << endl;
