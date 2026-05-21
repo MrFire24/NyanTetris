@@ -5,6 +5,8 @@
 
 TSillyCat SillyCat;
 
+TSillyCat::TSillyCat() {}
+
 void TSillyCat::updateFace() {
 	//return;
 	std::cout << rgb(255, 255, 255);
